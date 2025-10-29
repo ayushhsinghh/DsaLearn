@@ -2,11 +2,15 @@ package org.ayushsingh;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.Stack;
 
@@ -374,8 +378,78 @@ public class GraphQuestions {
         return false;
     }
 
-    //Dijkstra's Algorithm
+    //Dijkstra's Algorithm ( Shortest Distance in Weighted Graph( Non-negative weight)
+    public int shortestDistance(List<List<Graph.Edge>> graph, Integer start, Integer end) {
+        boolean[] visited = new boolean[graph.size()];
+        int[] distance = new int[graph.size()];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[start] = 0;
+
+        PriorityQueue<Graph.Edge> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.weight));
+        pq.add(new Graph.Edge(start, 0));
+
+        while (!pq.isEmpty()) {
+            Graph.Edge e = pq.poll();
+            int node = e.node;
+
+            if(visited[node]) continue;
+            visited[node] = true;
+
+            for(Graph.Edge n : graph.get(node)) {
+                if(distance[n.node] > distance[node] + n.weight) {
+                    distance[n.node] = distance[node] + n.weight;
+                    pq.add(new  Graph.Edge(n.node, distance[n.node]));
+                }
+            }
+
+        }
+
+        return distance[end] == Integer.MAX_VALUE ? -1 : distance[end];
+    }
+
+    // Dijkstra Algorithm for Shortest Path ( Get Entire Shortest Path )
+    public List<Integer> shortestPath(List<List<Graph.Edge>> graph, Integer src, Integer end) {
+        int[] distance = new int[graph.size()];
+        Arrays.fill(distance, Integer.MAX_VALUE);
+        distance[src] = 0;
+        int[] parent = new int[graph.size()];
+        Arrays.fill(parent, -1);
+        PriorityQueue<Graph.Edge> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.weight));
+        Set<Graph.Edge> visited = new HashSet<>();
+        pq.add(new Graph.Edge(src, 0));
+        visited.add(pq.peek());
+
+        while (!pq.isEmpty()) {
+            Graph.Edge e = pq.poll();
+            int node = e.node;
+            if(visited.contains(e)) continue;
+
+            visited.add(e);
+
+            for(Graph.Edge n : graph.get(node)) {
+                if(distance[n.node] > distance[node] + n.weight ) {
+                    distance[n.node] = distance[node] + n.weight;
+                    pq.add(new  Graph.Edge(n.node, distance[n.node]));
+                    parent[n.node] = node;
+                }
+            }
+        }
+        if (distance[end] == Integer.MAX_VALUE) return List.of(); // no path
+
+        // Reconstructing Path from Parent Array.
+        List<Integer> ans = new ArrayList<>();
+        while(end != -1) {
+            if(parent[end] != -1) ans.add(parent[end]);
+            end = parent[end];
+        }
+
+        // Reverse it
+        Collections.reverse(ans);
+        return ans;
+    }
+
     //Bellman Ford Algorithm
+    //FloydWarshall Algorithm
 
     //Prim's Algorithm
     //Kruskal's Algorithm

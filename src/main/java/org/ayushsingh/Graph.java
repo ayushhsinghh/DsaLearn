@@ -4,6 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Graph {
+    public static class Edge {
+        Integer node;
+        Integer weight;
+
+        public Edge(Integer node, Integer weight) {
+            this.node = node;
+            this.weight = weight;
+        }
+    }
+
     List<List<Integer>> graph = new ArrayList<>();
 
     public static class UnionFind {
