@@ -1,12 +1,15 @@
-package org.ayushsingh;
+package org.ayushsingh.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class Graph {
     public static class Edge {
-        Integer node;
-        Integer weight;
+        public Integer node;
+        public Integer weight;
 
         public Edge(Integer node, Integer weight) {
             this.node = node;

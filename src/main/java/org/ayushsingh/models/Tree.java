@@ -1,15 +1,15 @@
-package org.ayushsingh;
+package org.ayushsingh.models;
 
 import java.util.LinkedList;
 import java.util.Queue;
 
 public class Tree {
-    int val;
-    Tree left;
-    Tree right;
+    public int val;
+    public Tree left;
+    public Tree right;
 
     Tree() {}
-    Tree(int val) { this.val = val; }
+    public Tree(int val) { this.val = val; }
 
     Tree(int val, Tree left, Tree right) {
          this.val = val;

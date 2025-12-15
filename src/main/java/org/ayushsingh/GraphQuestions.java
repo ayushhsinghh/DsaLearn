@@ -1,5 +1,7 @@
 package org.ayushsingh;
 
+import org.ayushsingh.models.Graph;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,7 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.Stack;
 
 public class GraphQuestions {
 
@@ -31,7 +32,7 @@ public class GraphQuestions {
 
         for (int[] e : edges) {
             adj.get(e[0]).add(e[1]);
-        //    adj.get(e[1]).add(e[0]);
+        //    adj.get(e[1]).add(e[0]); // Uncomment for Undirected Graph
         }
 
         graph.setGraph(adj);
@@ -59,28 +60,30 @@ public class GraphQuestions {
             top = st.pop();
             visited[top] = true;
             System.out.print(top + " ");
-            for(int i: graph.get(top)) {
-                if(!visited[i]) {
-                    visited[i] = true;
-                    st.push(i);
+            List<Integer> neighbors = graph.get(top);
+            for (int i = neighbors.size() - 1; i >= 0; i--) { // Check in Reverse Order to match the recursion way
+                int neighbor = neighbors.get(i);
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    st.push(neighbor);
                 }
             }
         }
     }
 
     public static void bfs(List<List<Integer>> graph, int start) {
-        Deque<Integer> st = new ArrayDeque<>();
+        Deque<Integer> q = new ArrayDeque<>();
         boolean[] visited = new boolean[graph.size()];
-        st.offer(start);
+        q.offer(start);
         visited[start] = true;
         int first;
-        while (!st.isEmpty()) {
-            first = st.poll();
+        while (!q.isEmpty()) {
+            first = q.poll();
             System.out.print(first + " ");
             for(int i: graph.get(first)) {
                 if(!visited[i]) {
                     visited[i] = true;
-                    st.offer(i);
+                    q.offer(i);
                 }
             }
         }
@@ -101,20 +104,19 @@ public class GraphQuestions {
 
     public static boolean hasPathbfs(List<List<Integer>> graph, Integer start, Integer end) {
         boolean[] visited = new boolean[graph.size()];
-        Deque<Integer> st = new ArrayDeque<>();
-        st.offer(start);
+        Deque<Integer> q = new ArrayDeque<>();
+        q.offer(start);
         visited[start] = true;
         Integer first;
 
-        while (!st.isEmpty()) {
-            first = st.poll();
-            System.out.println(first + " ");
+        while (!q.isEmpty()) {
+            first = q.poll();
             if(Objects.equals(first, end)) return true;
 
             for (int node : graph.get(first)) {
                 if (!visited[node]) {
                     visited[node] = true;
-                    st.offer(node);
+                    q.offer(node);
                 }
             }
         }
@@ -164,28 +166,27 @@ public class GraphQuestions {
         boolean[] visited = new boolean[graph.size()];
         int[] distance = new int[graph.size()];
         Deque<Integer> q = new ArrayDeque<>();
+
+        visited[start] = true;
         q.offer(start);
         distance[start] = 0;
-        int first;
 
         while (!q.isEmpty()) {
-            first = q.poll();
-            int size = graph.get(first).size();
-            int i = 0;
+            int node = q.poll();
 
-            if(first == end) return distance[first];
+            if (node == end) return distance[node];  // early exit
 
-            while (i < size) {
-                if(!visited[graph.get(first).get(i)]) {
-                    visited[graph.get(first).get(i)] = true;
-                    q.offer(graph.get(first).get(i));
-                    distance[graph.get(first).get(i)] = distance[first] + 1;
+            for (int neighbor : graph.get(node)) {
+                if (!visited[neighbor]) {
+                    visited[neighbor] = true;
+                    distance[neighbor] = distance[node] + 1;
+                    q.offer(neighbor);
                 }
-                i++;
             }
         }
-        return -1;
+        return -1; // not reachable
     }
+
 
     // Basic Logic is
     // 1. Maintain two “frontiers” (s1, s2)
@@ -296,6 +297,7 @@ public class GraphQuestions {
             adL.get(arr[1]).add(arr[0]);
             inD[arr[0]]++;
         }
+
         Deque<Integer> q = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
             if (inD[i] == 0) q.offer(i);
