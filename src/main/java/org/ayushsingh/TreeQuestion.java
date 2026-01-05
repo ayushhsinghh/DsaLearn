@@ -80,6 +80,8 @@ public class TreeQuestion {
         }
     }
 
+    Map<String, Integer> map = new HashMap<>();
+
     private static void preOrderI(Tree tree) {
         if(tree == null) return;
         Stack<Tree> stack = new Stack<>();

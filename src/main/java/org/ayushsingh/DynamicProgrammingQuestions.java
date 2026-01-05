@@ -138,6 +138,23 @@ public class DynamicProgrammingQuestions {
         return max;
     }
 
+    // Longest Palindromic Subsequence
+    // Note: Same as LCS, just make a new string as the Reverse of First
+    public static int LongestPalindromicSubsequence(String s1) {
+        String s2 = new StringBuilder(s1).reverse().toString();
+        return LongestPalindromicSubsequence(s1, s2, s1.length() -1, s2.length()-1);
+    }
+
+    public static int LongestPalindromicSubsequence(String s1, String s2, int n1, int n2) {
+        if(n1 == 0 || n2 == 0) return 0;
+
+        if(s2.charAt(n1-1) == s2.charAt(n2-1)) {
+            return 1 + LongestPalindromicSubsequence(s1, s2, n1-1, n2-1);
+        } else {
+            return Math.max(LongestPalindromicSubsequence(s1, s2, n1-1, n2),  LongestPalindromicSubsequence(s1, s2, n1, n2-1));
+        }
+    }
+
 
 
     public static void main(String[] chal) {
@@ -146,9 +163,9 @@ public class DynamicProgrammingQuestions {
 //        int W = 4;
 //        System.out.println(knapsackDP(prices, weights, W, 3));
 
-        String t1 = "ABCDEFGHIJKLMN";
+        String t1 = "agbcba";
         String t2 = "XYhfjsdhfkjdBCDEFXYZIJK";
 
-        System.out.println(LongestCommonSubstring(t1, t2, t1.length(), t2.length()));
+        System.out.println(LongestPalindromicSubsequence(t1));
     }
 }

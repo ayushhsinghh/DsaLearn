@@ -315,6 +315,7 @@ public class GraphQuestions {
 
             }
         }
+
         return ans == numCourses;
     }
     // The Above Problem can Also be solved using DFS, by just checking for Cycle in Directed Graph.
@@ -436,6 +437,7 @@ public class GraphQuestions {
                 }
             }
         }
+
         if (distance[end] == Integer.MAX_VALUE) return List.of(); // no path
 
         // Reconstructing Path from Parent Array.
@@ -450,11 +452,116 @@ public class GraphQuestions {
         return ans;
     }
 
-    //Bellman Ford Algorithm
-    //FloydWarshall Algorithm
+    // Prim's Algorithm
+    // Answer for LeetCode: 1584. Min Cost to Connect All Points
+    record Pair(int edge, int weight) {}
+    public int minCostConnectPoints(int[][] points) {
+        int ans = 0;
+        PriorityQueue<Pair> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a.weight));
+        boolean[] visited = new boolean[points.length];
 
-    //Prim's Algorithm
-    //Kruskal's Algorithm
+        Pair first = new Pair(0, 0); // Start with any Vertex, and its weight will be zero
+        pq.add(first);
+
+        while( !pq.isEmpty() ) {
+            Pair min = pq.poll();
+            int node = min.edge;
+            if(visited[min.edge]) continue;
+            System.out.println(node);
+            ans += min.weight;
+            visited[node] = true;
+
+            for(int i = 0 ; i < points.length ; i++) {
+                if(!visited[i]) {
+                    int distance = Math.abs(points[node][0] - points[i][0]) + Math.abs(points[node][1] - points[i][1]); // Use any other logic to calculat distance here.
+                    Pair toAdd = new Pair(i, distance);
+                    pq.add(toAdd);
+                }
+            }
+        }
+
+        return ans;
+    }
+
+
+
+    // Same about question Without PriorityQueue
+    public int minCostConnectPoints2(int[][] points) {
+        int ans = 0;
+
+        boolean[] isMST = new boolean[points.length];
+        int[] minDis = new int[points.length];
+
+        Arrays.fill(minDis, Integer.MAX_VALUE);
+        minDis[0] = 0;
+
+        for(int k = 0 ; k < points.length; k++) {
+            int top = -1;
+            for(int j = 0 ; j < minDis.length ; j++) {
+                if(!isMST[j] && (top == -1 || minDis[top] > minDis[j])) top = j;
+            }
+
+            isMST[top] = true;
+            ans += minDis[top];
+
+            for(int i = 0 ; i < points.length ; i++) {
+                if(!isMST[i]) {
+                    minDis[i] = Math.min(minDis[i], Math.abs(points[top][0] - points[i][0]) + Math.abs(points[top][1] - points[i][1]));
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    // Bellman Ford Algorithm
+    // Relax the Edge of the Graph (V-1) Times : V is No. of Vertex
+    // After V-1 times, we'll have the shortest path from source to all the node, even in Negative Graphs
+
+
+    // FloydWarshall Algorithm
+    public static void floydWarshall(int[][] edges, int n) {
+        int[][] floyd = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(floyd[i], Integer.MAX_VALUE);
+            floyd[i][i] = 0; // distances from a node to itself remain should be Zero (IMP)
+        }
+
+        for (int[] e : edges) {
+            int u = e[0], v = e[1], w = e[2];
+            floyd[u][v] = Math.min(floyd[u][v], w);
+            floyd[v][u] = Math.min(floyd[v][u], w); // Remove for Directed Graph
+        }
+
+        for (int via = 0; via < n; via++) {
+            for (int i = 0; i < n; i++) {
+                if (floyd[i][via] == Integer.MAX_VALUE) continue;
+                for (int j = 0; j < n; j++) {
+                    if (floyd[via][j] == Integer.MAX_VALUE) continue;
+                    floyd[i][j] = Math.min(floyd[i][j], floyd[i][via] + floyd[via][j]); // If input has multiple edges between same nodes, we should keep the minimum
+                }
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.println(floyd[i][j]);
+            }
+        }
+
+        // Negative Cycle Detection
+        for (int i = 0; i < n; i++) {
+            if (floyd[i][i] < 0) {
+                System.out.println("Negative cycle detected");
+            }
+        }
+    }
+
+    // Kruskal's Algorithm
+    //1. Sort all Edges in ascending order by their weight
+    //2. Use Union-Find to connect all the edges
+
+
     // Eulerian Problem
     // Strongly Connected Components
     // Lowest common ancestor of DAG & Shortest common Ancestral path
