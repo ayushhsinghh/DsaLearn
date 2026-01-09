@@ -156,6 +156,36 @@ public class DynamicProgrammingQuestions {
     }
 
 
+    // Interval DP
+    public String longestPalindrome(String s) {
+        Boolean[][] dp = new Boolean[s.length()+1][s.length()+1];
+        String ans = "";
+        for(int i = 0; i < s.length(); i++) {
+            for(int j = 0; j < s.length(); j++) {
+                if(isPalindrome(s, i, j, dp)) {
+                    if(j - i + 1 > ans.length()) {
+                        ans = s.substring(i , j+1);
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+    public boolean isPalindrome(String s, int left, int right, Boolean[][] dp) {
+        if(left >= right) return true;
+
+        if ( dp[left][right] != null ) return dp[left][right];
+
+        if(s.charAt(left) != s.charAt(right)) {
+            dp[left][right] = false;
+        } else {
+            dp[left][right] = isPalindrome(s, left+1, right-1, dp); // interval DP executes here
+        }
+
+        return dp[left][right];
+    }
+
+
 
     public static void main(String[] chal) {
 //        int[] prices = {1 , 2 , 3};
@@ -163,9 +193,9 @@ public class DynamicProgrammingQuestions {
 //        int W = 4;
 //        System.out.println(knapsackDP(prices, weights, W, 3));
 
-        String t1 = "agbcba";
-        String t2 = "XYhfjsdhfkjdBCDEFXYZIJK";
-
-        System.out.println(LongestPalindromicSubsequence(t1));
+//        String t1 = "abacabaa";
+//        String t2 = "XYhfjsdhfkjdBCDEFXYZIJK";
+//
+//        System.out.println(isPalindrome(t1, 0, t1.length()-1));
     }
 }

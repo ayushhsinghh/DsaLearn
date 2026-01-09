@@ -336,19 +336,19 @@ public class GraphQuestions {
         for(int i = 0; i< row;i++) {
             for(int j = 0; j < col; j++) {
                 if(grid[i][j] == '1') {
-                    count++;
+                    count++; // assume each 1 is a component
                     for(int[] dir : dirs) {
                         x = i + dir[0];
                         y = j + dir[1];
                         if(x>=0 && y>=0 && x<row && y < col && grid[x][y] == '1') {
-                            int idx = i * col + j;
+                            int idx = i * col + j; // (elements before this row) + (offset in this row)
                             int idy = x * col + y;
                             int p1 = uf.find(idx);
                             int p2 = uf.find(idy);
 
                             if(p1 != p2) {
                                 uf.union(p1, p2);
-                                count--;
+                                count--; // remove common component
                             }
                         }
                     }

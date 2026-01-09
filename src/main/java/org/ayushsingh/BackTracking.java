@@ -174,6 +174,17 @@ public class BackTracking {
             System.out.println(Arrays.toString(row));
         }
 //        System.out.println(result);
+
+        // HOW TO APROUCH A BACKTRACKING QUESTION ?
+        // Write down:
+        // 1. choice
+        // 2. constraint
+        // 3. goal
+        // 4. undo
+        //
+        //Decide:
+        //  start index OR used[] OR grid?
+        //Explain pruning logic out loud ?
     }
 
 }
