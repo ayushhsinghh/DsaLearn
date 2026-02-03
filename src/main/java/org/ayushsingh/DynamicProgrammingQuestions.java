@@ -155,6 +155,26 @@ public class DynamicProgrammingQuestions {
         }
     }
 
+    // Longest Increasing SubSequence
+    public int lengthOfLIS(int[] nums) {
+        int[][] dp = new int[nums.length+1][nums.length+1];
+        for(int[] d : dp) Arrays.fill(d, -1);
+
+        return solve(nums,0, -1, dp);
+    }
+    public int solve(int[] nums, int i, int prev, int[][] dp) {
+        if(i == nums.length) return 0;
+
+        if(dp[i][prev+1] != -1) return dp[i][prev+1];
+
+        int take = Integer.MIN_VALUE;
+        if(prev == -1 || nums[i] > nums[prev])
+            take =  1 + solve(nums, i+1, i, dp);
+        int skip = solve(nums, i+1, prev,dp);
+
+        return dp[i][prev+1] = Math.max(take, skip);
+    }
+
 
     // Interval DP
     public String longestPalindrome(String s) {

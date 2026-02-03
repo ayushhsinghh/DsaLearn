@@ -3,7 +3,9 @@ package org.ayushsingh;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BackTracking {
 
@@ -159,6 +161,45 @@ public class BackTracking {
         return ans;
     }
 
+    // 22. Generate Parentheses
+    // Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<>();
+        solve(0,n, new StringBuilder(), 0, 0, ans);
+        return ans;
+    }
+    public void solve(int idx,int n, StringBuilder curr, int open, int close, List<String> ans) {
+        if(idx == 2*n && isValid(curr.toString())) {
+            ans.add(curr.toString());
+            return;
+        }
+
+        if(open < n) {
+            curr.append('(');
+            solve(idx+1, n, curr, open+1, close, ans);
+            curr.deleteCharAt(idx);
+        }
+
+        if(close <= open) {
+            curr.append(')');
+            solve(idx+1, n, curr, open, close+1, ans);
+            curr.deleteCharAt(idx);
+        }
+    }
+    public boolean isValid(String curr) {
+        int arr = 0;
+        for(int i = 0; i < curr.length(); i++) {
+            if(curr.charAt(i) == '(') {
+                arr++;
+            } else {
+                arr--;
+                if(arr < 0) return false;
+            }
+        }
+        return true;
+    }
+
+
 
 
 
@@ -173,7 +214,8 @@ public class BackTracking {
         for(int[] row : result) {
             System.out.println(Arrays.toString(row));
         }
-//        System.out.println(result);
+        Map<Integer, Integer> map = new LinkedHashMap<>();
+        // System.out.println(result);
 
         // HOW TO APROUCH A BACKTRACKING QUESTION ?
         // Write down:
@@ -182,9 +224,8 @@ public class BackTracking {
         // 3. goal
         // 4. undo
         //
-        //Decide:
-        //  start index OR used[] OR grid?
-        //Explain pruning logic out loud ?
+        // Decide:
+        // start index OR used[] OR grid?
+        // Explain pruning logic out loud ?
     }
-
 }
