@@ -10,8 +10,7 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class TreeQuestion {
 
     public static List<Integer> value = new ArrayList<>();
@@ -129,6 +128,23 @@ public class TreeQuestion {
 
         return 1 + Math.max(lf ,lh);
     }
+
+
+    // Least Common Ancestor
+    public Tree LCS(Tree root, Tree p, Tree q) {
+        if (root == null) return null;
+        if(root == p || root == q) return root;
+
+        Tree left = LCS(root.left, p, q);
+        Tree right = LCS(root.right, p, q);
+
+        if(left != null && right != null) {
+            return root;
+        }
+
+        return left != null ? left : right;
+    }
+
 
     // Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
     public boolean isSymmetric(Tree root) {

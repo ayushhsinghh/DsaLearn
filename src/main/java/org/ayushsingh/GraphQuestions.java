@@ -312,7 +312,6 @@ public class GraphQuestions {
                 if (inD[n] == 0) {
                     q.offer(n);
                 }
-
             }
         }
 
